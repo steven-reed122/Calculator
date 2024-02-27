@@ -2,17 +2,24 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <math.h>
+#include <cctype>
+
+#define _USE_MATH_DEFINES
 
 // Token stuff
 // Token “kind” values:
+
 char const number = '8';    // a floating-point number
 char const quit = 'q';      // an exit command
 char const print = ';';     // a print command
+char const variable = 'v';  // a varaible name
 
 class token
 {
     char kind_;       // what kind of token
     double value_;    // for numbers: a value
+    std::string name_; // for variables and defined values: a name
 
 public:
     // constructors
@@ -23,6 +30,12 @@ public:
     }
     token(double val)
       : kind_(number)    // let ‘8’ represent “a number”
+      , value_(val)
+    {
+    }
+    token(std::string name, double val)
+      : kind_(variable)
+      , name_(name)
       , value_(val)
     {
     }

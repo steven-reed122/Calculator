@@ -1,6 +1,8 @@
 
 #include <iostream>
 #include <stdexcept>
+#define _USE_MATH_DEFINES
+#include <math.h>
 
 // Token stuff
 struct token
@@ -58,11 +60,12 @@ token token_stream::get()    // read a token from the token_stream
 
     char ch;
     std::cin >> ch;    // note that >> skips whitespace (space, newline, tab, etc.)
+    std::string s;
 
     switch (ch)
     {
     case '(': case ')': case ';': case 'q':
-    case '+': case '-': case '*': case '/':
+    case '+': case '-': case '*': case '/': case '%':
         return token(ch);    // let each character represent itself
     case '.': case '0': case '1': case '2': case '3':
     case '4': case '5': case '6': case '7': case '8':
@@ -73,6 +76,11 @@ token token_stream::get()    // read a token from the token_stream
         std::cin >> val;                // read a floating-point number
         return token('8', val);    // let ‘8’ represent “a number”
     }
+    case 'p':
+        std::cin.putback(ch);
+        std::cin >> s;
+        if (s == "pi")
+            return token('p', M_PI);
     default:
         throw std::runtime_error("Bad token");
     }
